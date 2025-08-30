@@ -39,6 +39,12 @@ android {
     buildConfig true
   }
 
+  externalNativeBuild {
+    cmake {
+      path file("../cpp/CMakeLists.txt")
+    }
+  }
+
   buildTypes {
     release {
       minifyEnabled false

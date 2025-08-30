@@ -11,11 +11,8 @@ class TurboDataModule(reactContext: ReactApplicationContext) :
     return NAME
   }
 
-  // Example method
-  // See https://reactnative.dev/docs/native-modules-android
-  override fun multiply(a: Double, b: Double): Double {
-    return a * b
-  }
+  // The actual implementation is in the C++ files
+  // This Kotlin class just serves as the registration point for the TurboModule
 
   companion object {
     const val NAME = "TurboData"

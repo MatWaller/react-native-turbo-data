@@ -3,11 +3,8 @@
 @implementation TurboData
 RCT_EXPORT_MODULE()
 
-- (NSNumber *)multiply:(double)a b:(double)b {
-    NSNumber *result = @(a * b);
-
-    return result;
-}
+// The actual implementation is in the C++ files
+// This is just the bridge to register the module
 
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
