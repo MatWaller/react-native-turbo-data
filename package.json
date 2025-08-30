@@ -5,6 +5,17 @@
   "author": "Mathew Waller <mathewwaller7@gmail.com> (https://github.com/matwaller)",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
+  "scripts": {
+    "build": "bob build",
+    "example": "yarn workspace react-native-turbo-data-example",
+    "test": "jest",
+    "typecheck": "tsc",
+    "lint": "eslint \"**/*.{js,ts,tsx}\"",
+    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
+    "prepare": "bob build",
+    "release": "release-it --only-version",
+    "codegen": "react-native codegen"
+  },
   "peerDependencies": {
     "react": "*",
     "react-native": "*"
@@ -63,14 +74,8 @@
     "!**/__mocks__",
     "!**/.*"
   ],
-  "scripts": {
-    "example": "yarn workspace react-native-turbo-data-example",
-    "test": "jest",
-    "typecheck": "tsc",
-    "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
-    "prepare": "bob build",
-    "release": "release-it --only-version"
+  "gitHooks": {
+    "pre-commit": "lint-staged"
   },
   "keywords": [
     "react-native",
@@ -149,17 +154,17 @@
       ]
     ]
   },
-  "codegenConfig": {
-    "name": "TurboDataSpec",
-    "type": "modules",
-    "jsSrcsDir": "src",
-    "android": {
-      "javaPackageName": "com.turbodata"
-    }
-  },
   "create-react-native-library": {
     "languages": "kotlin-objc",
     "type": "turbo-module",
     "version": "0.53.0"
+  },
+  "codegenConfig": {
+    "name": "NativeTurboData",
+    "type": "modules",
+    "jsSrcsDir": "specs",
+    "android": {
+      "javaPackageName": "com.turbodata"
+    }
   }
 }
