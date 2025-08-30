@@ -1,7 +1,11 @@
-import { TurboModuleRegistry, type TurboModule } from 'react-native';
+import { type TurboModule, TurboModuleRegistry } from 'react-native';
 
 export interface Spec extends TurboModule {
-  multiply(a: number, b: number): number;
+  filterObject(
+    dataObject: readonly { [key: string]: any }[],
+    filterCriteria: { [key: string]: any },
+    sortCriteria?: { [key: string]: 'asc' | 'desc' }
+  ): readonly { [key: string]: any }[];
 }
 
-export default TurboModuleRegistry.getEnforcing<Spec>('TurboData');
+export default TurboModuleRegistry.getEnforcing<Spec>('NativeTurboData');

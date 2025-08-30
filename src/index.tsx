@@ -1,4 +1,4 @@
-import TurboData from '../specs/NativeTurboData';
+import TurboData from './NativeTurboData';
 
 export interface FilterCriteria {
   [key: string]: any;
