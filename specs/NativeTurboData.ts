@@ -1,7 +1,8 @@
-import {TurboModule, TurboModuleRegistry} from 'react-native';
+import type {TurboModule} from 'react-native';
+import {TurboModuleRegistry} from 'react-native';
 
 export interface Spec extends TurboModule {
-  filterObject(dataObject: Object, filterCriteria: Object, sortCriteria?: { [key: string]: 'asc' | 'desc' }): Array<Object> | null;
+  filterObject(dataObject: { [key: string]: any }[], filterCriteria: { [key: string]: any }, sortCriteria?: { [key: string]: 'asc' | 'desc' }): { [key: string]: any }[];
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>(

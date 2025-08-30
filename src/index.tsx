@@ -1,4 +1,4 @@
-import TurboData from './NativeTurboData';
+import TurboData from '../specs/NativeTurboData';
 
 export interface FilterCriteria {
   [key: string]: any;
@@ -9,9 +9,9 @@ export interface SortCriteria {
 }
 
 export function filterObject(
-  dataObject: Object,
-  filterCriteria: FilterCriteria,
-  sortCriteria?: SortCriteria
-): Array<Object> | null {
+  dataObject: { [key: string]: any }[],
+  filterCriteria: { [key: string]: any },
+  sortCriteria?: { [key: string]: 'asc' | 'desc' }
+): { [key: string]: any }[] {
   return TurboData.filterObject(dataObject, filterCriteria, sortCriteria);
 }
