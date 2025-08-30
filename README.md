@@ -1,10 +1,11 @@
 # react-native-turbo-data
 
-A high-performance React Native Turbo Module for filtering and sorting large datasets. This module leverages C++ for data operations, providing significant performance improvements over JavaScript-based filtering and sorting.
+A high-performance React Native Turbo Module for filtering and sorting large datasets. This module leverages C++ for synchronous data operations, providing significant performance improvements over JavaScript-based filtering and sorting.
 
 ## Features
 
-- High-performance C++ filtering and sorting
+- Synchronous, high-performance C++ filtering and sorting
+- Zero Promise overhead - direct return values
 - Works on both iOS and Android
 - Support for multiple filter criteria
 - Optional sorting with ascending/descending support
@@ -37,6 +38,7 @@ const filterByAge = {
   age: 25
 };
 
+// Synchronous operation - direct return value
 const result = filterObject(data, filterByAge);
 console.log(result);
 // Output:
@@ -45,6 +47,90 @@ console.log(result);
 //   { id: 3, name: 'Bob', age: 25, city: 'Swindon' }
 // ]
 ```
+
+### Multiple Filter Criteria
+
+```typescript
+// Filter by multiple criteria
+const filterByAgeAndCity = {
+  age: 25,
+  city: 'Southampton'
+};
+
+// Synchronous operation - direct return value
+const result = filterObject(data, filterByAgeAndCity);
+console.log(result);
+// Output:
+// [
+//   { id: 1, name: 'Mat', age: 25, city: 'Southampton' }
+// ]
+```
+
+### Filtering and Sorting
+
+```typescript
+// Filter and sort the results
+const filterCriteria = {
+  age: 25
+};
+
+const sortCriteria = {
+  name: 'asc' // Use 'desc' for descending order
+};
+
+// Synchronous operation - direct return value
+const result = filterObject(data, filterCriteria, sortCriteria);
+console.log(result);
+// Output:
+// [
+//   { id: 3, name: 'Mat', age: 25, city: 'Swindon' },
+//   { id: 1, name: 'Waller', age: 25, city: 'Southampton' }
+// ]
+```
+
+### Using with React Components
+
+```typescript
+import React, { useState, useCallback } from 'react';
+import { View, Text, Button } from 'react-native';
+import { filterObject } from 'react-native-turbo-data';
+
+interface User {
+  id: number;
+  name: string;
+  age: number;
+  city: string;
+}
+
+export function UserList() {
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+
+  const handleFilter = useCallback(() => {
+    const users: User[] = [
+      { id: 1, name: 'John', age: 25, city: 'Southampton' },
+      { id: 2, name: 'Jane', age: 30, city: 'Los Angeles' },
+      { id: 3, name: 'Bob', age: 25, city: 'Swindon' }
+    ];
+
+    const filterCriteria = { age: 25 };
+    const sortCriteria = { name: 'asc' as const };
+
+    // Synchronous operation - direct return value
+    const result = filterObject(users, filterCriteria, sortCriteria);
+    setFilteredUsers(result);
+  }, []);
+
+  return (
+    <View>
+      <Button title="Filter Users" onPress={handleFilter} />
+      {filteredUsers.map(user => (
+        <Text key={user.id}>
+          {user.name} ({user.age}) - {user.city}
+        </Text>
+      ))}
+    </View>
+  );
+}
 
 ### Multiple Filter Criteria
 
@@ -84,11 +170,11 @@ console.log(result);
 // ]
 ```
 
-### TypeScript Support
-
-The package includes TypeScript definitions for type-safe usage:
+### Using with React Components
 
 ```typescript
+import React, { useState, useEffect } from 'react';
+import { View, Text } from 'react-native';
 import { filterObject } from 'react-native-turbo-data';
 
 interface User {
@@ -98,19 +184,43 @@ interface User {
   city: string;
 }
 
-// FilterCriteria type ensures type safety for your filter object
-type FilterCriteria = Partial<User>;
+export function UserList() {
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-const users: User[] = [/* ... */];
-const filterCriteria: FilterCriteria = {
-  age: 25
-};
+  useEffect(() => {
+    const users: User[] = [
+      { id: 1, name: 'John', age: 25, city: 'Southampton' },
+      { id: 2, name: 'Jane', age: 30, city: 'Los Angeles' },
+      { id: 3, name: 'Bob', age: 25, city: 'Swindon' }
+    ];
 
-const sortCriteria = {
-  name: 'asc' as const // 'asc' | 'desc'
-};
+    const filterCriteria = { age: 25 };
+    const sortCriteria = { name: 'asc' as const };
 
-const result = filterObject(users, filterCriteria, sortCriteria);
+    try {
+      const result = filterObject(users, filterCriteria, sortCriteria);
+      setFilteredUsers(result);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    }
+    setLoading(false);
+  }, []);
+
+  if (loading) return <Text>Loading...</Text>;
+  if (error) return <Text>Error: {error}</Text>;
+
+  return (
+    <View>
+      {filteredUsers.map(user => (
+        <Text key={user.id}>
+          {user.name} ({user.age}) - {user.city}
+        </Text>
+      ))}
+    </View>
+  );
+}
 ```
 
 ## Performance

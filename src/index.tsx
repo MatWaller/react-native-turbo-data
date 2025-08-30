@@ -9,9 +9,9 @@ export interface SortCriteria {
 }
 
 export function filterObject(
-  dataObject: { [key: string]: any }[],
+  dataObject: readonly { [key: string]: any }[],
   filterCriteria: { [key: string]: any },
   sortCriteria?: { [key: string]: 'asc' | 'desc' }
-): { [key: string]: any }[] {
+): readonly { [key: string]: any }[] {
   return TurboData.filterObject(dataObject, filterCriteria, sortCriteria);
 }
