@@ -1,17 +1,15 @@
 import TurboData from './NativeTurboData';
 
-export interface FilterCriteria {
-  [key: string]: any;
-}
-
-export interface SortCriteria {
-  [key: string]: 'asc' | 'desc';
-}
-
 export function filterObject(
-  dataObject: readonly { [key: string]: any }[],
-  filterCriteria: { [key: string]: any },
+  dataObject: readonly {
+    [key: string]: string | number | boolean | null | object;
+  }[],
+  filterCriteria: {
+    [key: string]: string | number | boolean | null | object;
+  },
   sortCriteria?: { [key: string]: 'asc' | 'desc' }
-): readonly { [key: string]: any }[] {
+): readonly {
+  [key: string]: string | number | boolean | null | object;
+}[] {
   return TurboData.filterObject(dataObject, filterCriteria, sortCriteria);
 }
